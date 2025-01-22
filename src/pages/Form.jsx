@@ -1,6 +1,11 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+
 function Form() {
+  const [Position, setPosition] = useState();
+  const Person_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
   const {
     register,
     handleSubmit,
@@ -8,7 +13,21 @@ function Form() {
   } = useForm();
   console.log(errors);
   const onSubmit = (data) => console.log(data);
-
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch(Person_Url);
+      const datas = await res.json();
+      setPosition(
+        datas.map((data, index) => (
+          <option key={index} value={data.id}>
+            {data.name}
+          </option>
+        ))
+      );
+    }
+    fetchData();
+  }, []);
+  
   return (
     <>
       <img
@@ -82,9 +101,7 @@ function Form() {
               {...register("option", { required: true })}
               className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
             >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+              {Position}
             </select>
           </div>
 
