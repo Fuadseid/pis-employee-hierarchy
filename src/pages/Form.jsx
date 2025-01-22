@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-
+import { motion } from "framer-motion";
 function Form() {
   const {
     register,
@@ -12,66 +12,90 @@ function Form() {
   return (
     <>
       <img
-        className="w-30 h-10 ml-[45%] mt-[5%]"
+        className="w-30 h-10 mx-auto mt-[5%] md:mt-[3%]"
         src="/images/perago2.webp"
         alt="LOGO"
       />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-8 bg-[#e4f5e0] rounded-lg shadow-lg max-w-lg mt-[6%] mx-auto"
-      >
-        <h className="ml-[25%] font-light text-xl">Employee Registration</h>
-        <div className="mb-6 mt-6">
-          <input
-            type="text"
-            {...register("name", {
-              required: "This UserName Requiered",
-              minLength: 4,
-            })}
-            placeholder="Full Name"
-            className={`w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
-              errors.name ? "border-red-500" : "border-gray-300 "
-            }`}
-          />
-          {errors.name && (
-            <p className="text-red-600">Please Insert Full name</p>
-          )}
-        </div>
 
-        <div className="mb-6">
-          <textarea
-            placeholder="Description"
-            id="description"
-            {...register("description", {
-              required: "This is Requiered",
-              minLength: 4,
-              maxLength: 200,
-            })}
-            className={`w-full  p-3 border  ${
-              errors.description ? "border-red-500" : "border-gray-300 "
-            } border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600`}
-          />
-          {errors.description && (
-            <p className="text-red-600">Please insert Description</p>
-          )}
+      <div className="flex flex-col md:flex-row justify-center items-center mt-10 md:mt-16">
+        <motion.img
+         initial={{ opacity: 0, x: -50 }}
+         animate={{ opacity: 1, x: 0 }}
+         transition={{ duration: 1 }}
+          src="/images/employee.jpg"
+          className="hidden md:block w-[50%] md:w-[30%] lg:w-[20%] h-auto md:mr-10"
+          alt="Employee"
+        />
 
-          <select
-            {...register("option", { required: true })}
-            className="mt-2 p-2 rounded-md w-44 "
-          >
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="bg-lime-700 w-[100%]   hover:bg-lime-900  transform hover:scale-110 transition duration-500 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+        <motion.form
+        initial={{opacity:0}}
+        animate={{opacity:1}}
+        transition={{duration:1}}
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-6 bg-[#e4f5e0] rounded-lg shadow-lg w-[50%] max-w-lg mt-10 md:mt-0 md:mr-20"
         >
-          Submit
-        </button>
-      </form>
+          <h1 className="text-center font-light text-xl mb-6">
+            Employee Registration
+          </h1>
+
+          <div className="mb-6">
+            <input
+              type="text"
+              {...register("name", {
+                required: "This UserName is Required",
+                minLength: 4,
+              })}
+              placeholder="Full Name"
+              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.name && (
+              <p className="text-red-600 text-sm mt-1">
+                Please insert your full name
+              </p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <textarea
+              placeholder="Description"
+              id="description"
+              {...register("description", {
+                required: "This is Required",
+                minLength: 4,
+                maxLength: 200,
+              })}
+              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
+                errors.description ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.description && (
+              <p className="text-red-600 text-sm mt-1">
+                Please insert a description
+              </p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <select
+              {...register("option", { required: true })}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
+            >
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-lime-700 w-full hover:bg-lime-900 transform hover:scale-110 transition duration-500 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+          >
+            Submit
+          </button>
+        </motion.form>
+      </div>
     </>
   );
 }
