@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const AddPosition = () => {
   const [name, setName] = useState("");
@@ -63,72 +64,79 @@ const AddPosition = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-3xl font-semibold mb-6 text-green-700">
-        Add Position
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-5">
-          <label
-            htmlFor="name"
-            className="block text-gray-800 text-lg font-medium mb-1"
-          >
-            Position Name:
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 p-2"
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="description"
-            className="block text-gray-800 text-lg font-medium mb-1"
-          >
-            Description:
-          </label>
-          <input
-            type="text"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 p-2"
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="parentId"
-            className="block text-gray-800 text-lg font-medium mb-1"
-          >
-            Parent Position:
-          </label>
-          <select
-            id="parentId"
-            value={parentId}
-            onChange={(e) => setParentId(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 p-2"
-          >
-            <option value="">Select Parent Position</option>
-            {positions.map((position) => (
-              <option key={position.id} value={position.id}>
-                {position.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700 transition duration-200"
+    <>
+      <img
+        className="w-30 h-10 mx-auto mt-[5%] md:mt-[3%] consistent-styling"
+        src="/images/perago2.webp"
+        alt="LOGO"
+      />
+
+      <div className="flex flex-col md:flex-row justify-center items-center mt-10 md:mt-16 consistent-styling">
+        <motion.img
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1 }}
+          src="/images/employee.jpg"
+          className="hidden md:block w-[50%] md:w-[30%] lg:w-[20%] h-auto md:mr-10 consistent-styling"
+          alt="Employee"
+        />
+
+        <motion.form
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          onSubmit={handleSubmit}
+          className="p-6 bg-[#e4f5e0] rounded-lg shadow-lg w-[50%] max-w-lg mt-10 md:mt-0 md:mr-20 consistent-styling"
         >
-          Add Position
-        </button>
-      </form>
-    </div>
+          <h1 className="text-center font-light text-xl mb-6 consistent-styling">
+            Add Position
+          </h1>
+
+          <div className="mb-6 consistent-styling">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Position Name"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
+              required
+            />
+          </div>
+
+          <div className="mb-6 consistent-styling">
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Description"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
+              required
+            />
+          </div>
+
+          <div className="mb-6 consistent-styling">
+            <select
+              value={parentId}
+              onChange={(e) => setParentId(e.target.value)}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
+            >
+              <option value="">Select Parent Position</option>
+              {positions.map((position) => (
+                <option key={position.id} value={position.id}>
+                  {position.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-lime-700 w-full hover:bg-lime-900 transform hover:scale-110 transition duration-500 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500 consistent-styling"
+          >
+            Add Position
+          </button>
+        </motion.form>
+      </div>
+    </>
   );
 };
 
