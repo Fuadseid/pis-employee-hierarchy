@@ -27,6 +27,16 @@ const AddPosition = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Check for existing position
+    const exists = positions.some(
+      (position) => position.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
+      alert("This position already exists.");
+      return;
+    }
+
     const positionData = {
       name,
       description,
