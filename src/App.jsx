@@ -5,6 +5,8 @@ import Form from "./pages/Form";
 import TreeView from "./pages/TreeView";
 import Applayout from "./pages/Applayout";
 import PositionForm from "./pages/AddPosition";
+import { Provider } from "react-redux";
+import store from "./utils/store";
 const route = createBrowserRouter([
   {
     element: <Applayout />,
@@ -29,7 +31,11 @@ const route = createBrowserRouter([
   },
 ]);
 const App = () => {
-  return <RouterProvider router={route} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={route} />;
+    </Provider>
+  );
 };
 
 export default App;

@@ -2,7 +2,7 @@ import React from "react";
 
 const Popup = ({ hadleclose, hadleupdate, selecteduser, setselecteduser }) => {
   return (
-    <div className="w-full h-full absolute top-0 right-0 backdrop-blur-2xl  flex justify-center items-center  ">
+    <div className="w-full h-screen absolute top-0 right-0 backdrop-blur-2xl  flex justify-center items-center  ">
       <div className="bg-gray-300  max-w-[50%] h-[60%] flex flex-col justify-evenly items-center rounded-lg p-5 sm:w-[40%] shadow-xl">
         <form className="flex flex-col w-[80%] space-y-7 justify-center h-[80%]">
           <div>

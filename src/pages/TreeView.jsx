@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import Popup from "../components/Popup";
+import { useNavigate } from "react-router-dom";
 const TreeView = () => {
   const [positions, setPositions] = useState(null);
   const [people, setPeople] = useState(null);
@@ -14,6 +15,39 @@ const TreeView = () => {
     description: "",
   });
 
+  const hadledelete = async (id) => {
+    await axios.delete(
+      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${id}`
+    );
+  };
+
+  async function fetchuser(selectedid) {
+    if (selectedid == null) return;
+    else {
+      const data = await axios.get(
+        `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selectedid}`
+      );
+
+      setselecteduser({
+        ...selecteduser,
+        id: data.data.id,
+        name: data.data.name,
+        description: data.data.description,
+      });
+    }
+  }
+  const hadleclose = (id) => {
+    setIsopen(!isopen);
+    fetchuser(id);
+  };
+
+  const hadleupdate = async (e) => {
+    e.preventDefault();
+    const data = await axios.put(
+      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selecteduser.id}`,
+      selecteduser
+    );
+  };
   useEffect(() => {
     async function fetchDatas() {
       try {
@@ -37,47 +71,7 @@ const TreeView = () => {
     }
 
     fetchDatas();
-  }, []);
-  const hadledelete = async (id) => {
-    const data = await axios.delete(
-      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${id}`
-    );
-  };
-
-  console.log(positions);
-  async function fetchuser(selectedid) {
-    console.log(selectedid);
-    if (selectedid == null) return;
-    else {
-      const data = await axios.get(
-        `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selectedid}`
-      );
-
-      setselecteduser({
-        ...selecteduser,
-        id: data.data.id,
-        name: data.data.name,
-        description: data.data.description,
-      });
-    }
-  }
-  const hadleclose = (id) => {
-    setIsopen(!isopen);
-    fetchuser(id);
-  };
-
-  setTimeout(() => {
-    console.log(people.filter((person) => person.parentId == 1));
-  }, 5000);
-
-  const hadleupdate = async (e) => {
-    e.preventDefault();
-    const data = await axios.put(
-      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selecteduser.id}`,
-      selecteduser
-    );
-    console.log(data);
-  };
+  }, [hadleupdate, hadledelete]);
 
   const renderTree = (parentId) => {
     return positions
@@ -85,7 +79,7 @@ const TreeView = () => {
       .map((position) => (
         <li
           key={position.id}
-          className="w-[50%] flex flex-col space-y-1  bg-gray-500 px-5 py-4 rounded-2xl"
+          className="w-[50%] flex flex-col space-y-1  bg-gray-500  px-5 py-4 rounded-2xl"
         >
           <div className="flex min-w-max font-mono">
             <span className="text-gray-200  text-lg font-bold shadow-lg px-6">
@@ -103,7 +97,7 @@ const TreeView = () => {
                 .filter((person) => person.parentId == position.id)
                 .map((person) => (
                   <li key={person.id}>
-                    <div className="flex space-x-5 w-max space-y-3">
+                    <div className="flex space-x-5 w-max space-y-2 pl-5">
                       <span className="flex justify-center items-center text-md font-semibold font-mono text-gray-300">
                         {"👨"}
                         {person.name}
@@ -150,7 +144,7 @@ const TreeView = () => {
           {show ? "hide employe🦯" : "show employes 👁️"}
         </span>
       </div>
-      <ul className="flex justify-center items-center h-screen bg-gray-300  ">
+      <ul className="flex justify-center items-center min-h-max pt-20  bg-gray-300 ">
         {renderTree(null)}{" "}
       </ul>
       {isopen && (
