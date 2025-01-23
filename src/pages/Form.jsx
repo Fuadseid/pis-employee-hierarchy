@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Form() {
+
   const [positions, setPositions] = useState([]);
   const [selectedPositionId, setSelectedPositionId] = useState(null);
   const Person_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
@@ -25,6 +26,7 @@ function Form() {
     });
     reset();
     setSelectedPositionId(null);
+
   };
 
   useEffect(() => {
@@ -65,7 +67,9 @@ function Form() {
           onSubmit={handleSubmit(onSubmit)}
           className="p-6 bg-[#e4f5e0] rounded-lg shadow-lg w-[50%] max-w-lg mt-10 md:mt-0 md:mr-20"
         >
-          <h1 className="text-center font-light text-xl mb-6">Employee Registration</h1>
+          <h1 className="text-center font-light text-xl mb-6">
+            Employee Registration
+          </h1>
 
           <div className="mb-6">
             <input
@@ -80,7 +84,9 @@ function Form() {
               }`}
             />
             {errors.name && (
-              <p className="text-red-600 text-sm mt-1">Please insert your full name</p>
+              <p className="text-red-600 text-sm mt-1">
+                Please insert your full name
+              </p>
             )}
           </div>
 
@@ -98,7 +104,9 @@ function Form() {
               }`}
             />
             {errors.description && (
-              <p className="text-red-600 text-sm mt-1">Please insert a description</p>
+              <p className="text-red-600 text-sm mt-1">
+                Please insert a description
+              </p>
             )}
           </div>
 
