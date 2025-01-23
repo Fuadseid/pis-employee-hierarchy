@@ -5,8 +5,13 @@ import Form from "./pages/Form";
 import TreeView from "./pages/TreeView";
 import Applayout from "./pages/Applayout";
 import PositionForm from "./pages/AddPosition";
+
 import { Provider } from "react-redux";
 import store from "./utils/store";
+
+import ErrorPage from "./pages/ErrorPage";
+
+
 const route = createBrowserRouter([
   {
     element: <Applayout />,
@@ -26,6 +31,10 @@ const route = createBrowserRouter([
       {
         path: "/add-postion",
         element: <PositionForm />,
+      },
+      {
+        path: "*", // Catch-all route for unmatched paths
+        element: <ErrorPage />,
       },
     ],
   },

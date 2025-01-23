@@ -4,35 +4,29 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Form() {
-  const [Position, setPosition] = useState([]);
-  const [Id, setId] = useState(); // Corrected state update for Id
-  const Person_Url =
-    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
-  const Position_Url =
-    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
 
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [positions, setPositions] = useState([]);
+  const [selectedPositionId, setSelectedPositionId] = useState(null);
+  const Person_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
+  const Position_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
+
+  const { register, reset, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
-    axios
-      .post(Person_Url, {
-        name: data.name,
-        description: data.description,
-        parentId: Id, // Sending the selected Id
-      })
-      .then((response) => {
-        console.log("Person added:", response.data);
-      })
-      .catch((err) => {
-        console.error("Error adding person:", err);
-      });
+    axios.post(Person_Url, {
+      name: data.name,
+      description: data.description,
+      parentId: selectedPositionId,
+    })
+    .then((response) => {
+      console.log("Person added:", response.data);
+    })
+    .catch((err) => {
+      console.error("Error adding person:", err);
+    });
     reset();
-    setId(null);
+    setSelectedPositionId(null);
+
   };
 
   useEffect(() => {
@@ -40,19 +34,11 @@ function Form() {
       try {
         const res = await fetch(Position_Url);
         const datas = await res.json();
-
-        setPosition(
-          datas.map((data) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))
-        );
+        setPositions(datas);
       } catch (err) {
         console.error("Error fetching positions:", err);
       }
     }
-
     fetchData();
   }, []);
 
@@ -128,9 +114,16 @@ function Form() {
             <select
               {...register("option", { required: true })}
               className="w-full p-2 border uppercase rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
-              onChange={(e) => setId(e.target.value)}
+              onChange={(e) => setSelectedPositionId(e.target.value)}
             >
-              {Position}
+              <option value="" disabled selected>
+                Select a Position
+              </option>
+              {positions.map((position) => (
+                <option key={position.id} value={position.id}>
+                  {position.name}
+                </option>
+              ))}
             </select>
           </div>
 
