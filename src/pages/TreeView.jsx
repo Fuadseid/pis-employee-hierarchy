@@ -1,11 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import Popup from "../components/Popup";
 const TreeView = () => {
   const [positions, setPositions] = useState(null);
   const [people, setPeople] = useState(null);
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
+  const [isopen, setIsopen] = useState(false);
+  const [selecteduser, setselecteduser] = useState({
+    id: null,
+    name: "",
+    description: "",
+  });
 
   useEffect(() => {
     async function fetchDatas() {
@@ -20,6 +27,7 @@ const TreeView = () => {
         ]);
 
         setPositions(positionsData.data);
+
         setPeople(peopleData.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,13 +37,48 @@ const TreeView = () => {
     }
 
     fetchDatas();
-  }, [positions, people, setPositions]);
+  }, []);
   const hadledelete = async (id) => {
     const data = await axios.delete(
       `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${id}`
     );
+  };
+
+  console.log(positions);
+  async function fetchuser(selectedid) {
+    console.log(selectedid);
+    if (selectedid == null) return;
+    else {
+      const data = await axios.get(
+        `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selectedid}`
+      );
+
+      setselecteduser({
+        ...selecteduser,
+        id: data.data.id,
+        name: data.data.name,
+        description: data.data.description,
+      });
+    }
+  }
+  const hadleclose = (id) => {
+    setIsopen(!isopen);
+    fetchuser(id);
+  };
+
+  setTimeout(() => {
+    console.log(people.filter((person) => person.parentId == 1));
+  }, 5000);
+
+  const hadleupdate = async (e) => {
+    e.preventDefault();
+    const data = await axios.put(
+      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selecteduser.id}`,
+      selecteduser
+    );
     console.log(data);
   };
+
   const renderTree = (parentId) => {
     return positions
       .filter((position) => position.parentId == parentId)
@@ -57,9 +100,7 @@ const TreeView = () => {
           <ul className="list-none">
             {show &&
               people
-                .filter(
-                  (person) => Number(person.parentId) == Number(position.id)
-                )
+                .filter((person) => person.parentId == position.id)
                 .map((person) => (
                   <li key={person.id}>
                     <div className="flex space-x-5 w-max space-y-3">
@@ -68,7 +109,9 @@ const TreeView = () => {
                         {person.name}
                       </span>
                       <button
-                        onClick={() => console.log(` ${person.id}`)}
+                        onClick={() => {
+                          hadleclose(person.id);
+                        }}
                         className=" bg-green-500 px-3 py-1 rounded-md font-bold text-white border-none cursor-pointer"
                       >
                         update
@@ -110,6 +153,15 @@ const TreeView = () => {
       <ul className="flex justify-center items-center h-screen bg-gray-300  ">
         {renderTree(null)}{" "}
       </ul>
+      {isopen && (
+        <Popup
+          isopen={isopen}
+          hadleclose={hadleclose}
+          hadleupdate={hadleupdate}
+          selecteduser={selecteduser}
+          setselecteduser={setselecteduser}
+        />
+      )}
     </div>
   );
 };
