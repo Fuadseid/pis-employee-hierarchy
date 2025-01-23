@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Form from "./pages/Form";
 import TreeView from "./pages/TreeView";
 import Applayout from "./pages/Applayout";
+import PositionForm from "./pages/AddPosition";
 const route = createBrowserRouter([
   {
     element: <Applayout />,
@@ -19,6 +20,10 @@ const route = createBrowserRouter([
       {
         path: "/treeview",
         element: <TreeView />,
+      },
+      {
+        path: "/add-postion",
+        element: <PositionForm />,
       },
     ],
   },
