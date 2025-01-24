@@ -7,10 +7,9 @@ import Applayout from "./pages/Applayout";
 import PositionForm from "./pages/AddPosition";
 
 import { Provider } from "react-redux";
-import store from "./utils/store";
+import store from "./redux/store";
 
 import ErrorPage from "./pages/ErrorPage";
-
 
 const route = createBrowserRouter([
   {
