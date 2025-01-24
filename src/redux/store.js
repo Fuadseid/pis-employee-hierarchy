@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import peoples from "./peopleSlice";
-import position from "./postionSlice";
+import peoples from "./slices/peopleSlice";
+import position from "./slices/postionSlice";
 const store = configureStore({
   reducer: {
     people: peoples,
