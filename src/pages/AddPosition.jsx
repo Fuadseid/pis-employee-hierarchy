@@ -10,7 +10,7 @@ import { addPostion, fetchpersonandpeople } from "../services/api";
 
 const AddPosition = () => {
   const dispatch = useDispatch();
-  const { positions, setPositions, parentId, description, name } = useSelector(
+  const { positions, parentId, description, name } = useSelector(
     (state) => state.postion
   );
 
@@ -19,10 +19,12 @@ const AddPosition = () => {
     const exists = positions.some(
       (position) => position.name.toLowerCase() === name.toLowerCase()
     );
+
     if (exists) {
       alert("This position already exists.");
       return;
     }
+
     const positionData = {
       name,
       description,
@@ -32,33 +34,22 @@ const AddPosition = () => {
     try {
       const response = await addPostion(positionData);
 
-      if (!response.ok) {
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Position added:", result);
+        alert("Position added successfully!");
+        dispatch(setName(""));
+        dispatch(setDescription(""));
+        dispatch(setParentId(""));
+      } else {
         alert("Failed to add position.");
         return console.error("Error adding position:", response.statusText);
       }
-      const result = await response.json();
-      console.log("Position added:", result);
-      alert("Position added successfully!");
-      dispatch(setName(""));
-      dispatch(setDescription(""));
-      dispatch(setParentId(""));
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while adding position.");
     }
   };
-
-  useEffect(() => {
-    const fetchPositions = async () => {
-      try {
-        const [positionsData] = await fetchpersonandpeople();
-        dispatch(setPositions(positionsData.data));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchPositions();
-  }, []);
 
   return (
     <>
@@ -110,7 +101,7 @@ const AddPosition = () => {
               onChange={(e) => dispatch(setParentId(e.target.value))}
               className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
             >
-              <option value="">Select Parent Position</option>
+              <option defaultValue={true}>Select Parent Position</option>
               {positions.map((position) => (
                 <option key={position.id} value={position.id}>
                   {position.name}

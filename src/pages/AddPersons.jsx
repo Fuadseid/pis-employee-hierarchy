@@ -112,7 +112,7 @@ function AddPersons() {
               className="w-full p-2 border uppercase rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
               onChange={(e) => dispatch(setSelectedPositionId(e.target.value))}
             >
-              <option value="" disabled selected>
+              <option defaultValue={true} disabled selected>
                 Select a Position
               </option>
               {positions.map((position) => (
