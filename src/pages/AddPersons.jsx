@@ -1,15 +1,18 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setPositions,
+  setSelectedPositionId,
+} from "../redux/slices/postionSlice";
+import { addperson, fetchpersonandpeople } from "../services/api";
 
-function Form() {
-  const [positions, setPositions] = useState([]);
-  const [selectedPositionId, setSelectedPositionId] = useState(null);
-  const Person_Url =
-    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
-  const Position_Url =
-    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
+function AddPersons() {
+  const dispatch = useDispatch();
+  const { positions, selectedPositionId } = useSelector(
+    (state) => state.postion
+  );
 
   const {
     register,
@@ -18,29 +21,22 @@ function Form() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    axios
-      .post(Person_Url, {
-        name: data.name,
-        description: data.description,
-        parentId: selectedPositionId,
-      })
-      .then((response) => {
-        console.log("Person added:", response.data);
-      })
-      .catch((err) => {
-        console.error("Error adding person:", err);
-      });
-    reset();
-    setSelectedPositionId(null);
+  const onSubmit = async (data) => {
+    try {
+      const datas = await addperson(data, selectedPositionId);
+      console.log(datas);
+      reset();
+      dispatch(setSelectedPositionId(null));
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(Position_Url);
-        const datas = await res.json();
-        setPositions(datas);
+        const [positionsData] = await fetchpersonandpeople();
+        dispatch(setPositions(positionsData.data));
       } catch (err) {
         console.error("Error fetching positions:", err);
       }
@@ -114,7 +110,7 @@ function Form() {
             <select
               {...register("option", { required: true })}
               className="w-full p-2 border uppercase rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
-              onChange={(e) => setSelectedPositionId(e.target.value)}
+              onChange={(e) => dispatch(setSelectedPositionId(e.target.value))}
             >
               <option value="" disabled selected>
                 Select a Position
@@ -139,4 +135,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default AddPersons;

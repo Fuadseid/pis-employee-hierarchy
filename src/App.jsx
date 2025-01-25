@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
-import Form from "./pages/Form";
+import AddPersons from "./pages/AddPersons";
 import TreeView from "./pages/TreeView";
 import Applayout from "./pages/Applayout";
 import PositionForm from "./pages/AddPosition";
@@ -21,7 +21,7 @@ const route = createBrowserRouter([
       },
       {
         path: "/form",
-        element: <Form />,
+        element: <AddPersons />,
       },
       {
         path: "/treeview",
