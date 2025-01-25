@@ -61,9 +61,9 @@ function AddPersons() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
           onSubmit={handleSubmit(onSubmit)}
-          className="p-6 bg-[#e4f5e0] rounded-lg shadow-lg w-[50%] max-w-lg mt-10 md:mt-0 md:mr-20"
+          className="p-6 bg-green-200 rounded-lg shadow-lg w-[50%] max-w-lg mt-10 md:mt-0 md:mr-20"
         >
-          <h1 className="text-center font-light text-xl mb-6">
+          <h1 className="text-center font-black text-2xl mb-6">
             Employee Registration
           </h1>
 
@@ -75,7 +75,7 @@ function AddPersons() {
                 minLength: 4,
               })}
               placeholder="Full Name"
-              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
+              className={`w-full p-3 border-none rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
                 errors.name ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -95,7 +95,7 @@ function AddPersons() {
                 minLength: 4,
                 maxLength: 200,
               })}
-              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
+              className={`w-full p-3 border-none rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 ${
                 errors.description ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -109,14 +109,18 @@ function AddPersons() {
           <div className="mb-6">
             <select
               {...register("option", { required: true })}
-              className="w-full p-2 border uppercase rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
+              className="w-full p-2 border-none uppercase  rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600"
               onChange={(e) => dispatch(setSelectedPositionId(e.target.value))}
             >
               <option defaultValue={true} disabled selected>
                 Select a Position
               </option>
               {positions.map((position) => (
-                <option key={position.id} value={position.id}>
+                <option
+                  key={position.id}
+                  value={position.id}
+                  className="font-semibold"
+                >
                   {position.name}
                 </option>
               ))}
@@ -125,7 +129,7 @@ function AddPersons() {
 
           <button
             type="submit"
-            className="bg-lime-700 w-full hover:bg-lime-900 transform hover:scale-110 transition duration-500 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+            className="bg-green-500 w-full border-none cursor-pointer hover:bg-green-400 transform hover:scale-110 transition duration-500 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
           >
             Submit
           </button>

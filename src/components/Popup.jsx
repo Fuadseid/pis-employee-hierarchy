@@ -13,7 +13,7 @@ const Popup = ({ hadleclose, hadleupdate }) => {
 
   return (
     <div className="w-full h-screen absolute top-0 right-0 backdrop-blur-2xl  flex justify-center items-center  ">
-      <div className="bg-gray-300  max-w-[50%] h-[60%] flex flex-col justify-evenly items-center rounded-lg p-5 sm:w-[40%] shadow-xl">
+      <div className="bg-gray-300 w-[80%] sm:max-w-[50%] h-[60%] flex flex-col justify-evenly items-center rounded-lg p-5 sm:w-[40%] shadow-xl">
         <form className="flex flex-col w-[80%] space-y-7 justify-center h-[80%]">
           <div>
             <label className="text-md font-bold">Name</label>
@@ -41,7 +41,7 @@ const Popup = ({ hadleclose, hadleupdate }) => {
           </div>
 
           <button
-            className="w-[100%] self-center bg-black px-3 py-3 border-none text-white rounded-md mt-3 cursor-pointer"
+            className="w-[100%] self-center bg-green-500 px-3 py-3 border-none text-white rounded-md mt-3 cursor-pointer"
             onClick={(e) => hadleupdate(e)}
             disabled={!selecteduser ? true : false}
           >
@@ -50,7 +50,7 @@ const Popup = ({ hadleclose, hadleupdate }) => {
         </form>
         <button
           onClick={() => hadleclose(null)}
-          className="bg-green-500 px-5 py-2 self-end  font-bold border-none rounded-md cursor-pointer text-white"
+          className="bg-red-500 px-5 py-2 self-end  font-bold border-none rounded-md cursor-pointer text-white"
         >
           close
         </button>
