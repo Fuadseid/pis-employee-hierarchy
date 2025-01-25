@@ -1,42 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDescription,
+  setName,
+  setParentId,
+} from "../redux/slices/postionSlice";
+import { addPostion, fetchpersonandpeople } from "../services/api";
 
 const AddPosition = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [parentId, setParentId] = useState("");
-  const [positions, setPositions] = useState([]);
-
-  // Fetch existing positions
-  useEffect(() => {
-    const fetchPositions = async () => {
-      try {
-        const response = await fetch(
-          "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position"
-        );
-        const data = await response.json();
-        setPositions(data);
-      } catch (error) {
-        console.error("Error fetching positions:", error);
-      }
-    };
-
-    fetchPositions();
-  }, []);
+  const dispatch = useDispatch();
+  const { positions, setPositions, parentId, description, name } = useSelector(
+    (state) => state.postion
+  );
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Check for existing position
     const exists = positions.some(
       (position) => position.name.toLowerCase() === name.toLowerCase()
     );
-
     if (exists) {
       alert("This position already exists.");
       return;
     }
-
     const positionData = {
       name,
       description,
@@ -44,34 +30,35 @@ const AddPosition = () => {
     };
 
     try {
-      const response = await fetch(
-        "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(positionData),
-        }
-      );
+      const response = await addPostion(positionData);
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Position added:", result);
-        alert("Position added successfully!");
-        // Reset form fields
-        setName("");
-        setDescription("");
-        setParentId("");
-      } else {
-        console.error("Error adding position:", response.statusText);
+      if (!response.ok) {
         alert("Failed to add position.");
+        return console.error("Error adding position:", response.statusText);
       }
+      const result = await response.json();
+      console.log("Position added:", result);
+      alert("Position added successfully!");
+      dispatch(setName(""));
+      dispatch(setDescription(""));
+      dispatch(setParentId(""));
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while adding position.");
     }
   };
+
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const [positionsData] = await fetchpersonandpeople();
+        dispatch(setPositions(positionsData.data));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPositions();
+  }, []);
 
   return (
     <>
@@ -100,7 +87,7 @@ const AddPosition = () => {
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => dispatch(setName(e.target.value))}
               placeholder="Position Name"
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
               required
@@ -110,7 +97,7 @@ const AddPosition = () => {
           <div className="mb-6 consistent-styling">
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => dispatch(setDescription(e.target.value))}
               placeholder="Description"
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
               required
@@ -120,7 +107,7 @@ const AddPosition = () => {
           <div className="mb-6 consistent-styling">
             <select
               value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
+              onChange={(e) => dispatch(setParentId(e.target.value))}
               className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-600 consistent-styling"
             >
               <option value="">Select Parent Position</option>

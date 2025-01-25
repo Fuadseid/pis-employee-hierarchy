@@ -7,6 +7,9 @@ const initialState = {
     parentId: null,
   },
   people: null,
+  isopen: false,
+  show: false,
+  loading: true,
 };
 const peopleslice = createSlice({
   name: "peoples",
@@ -26,8 +29,23 @@ const peopleslice = createSlice({
     addpeoples(state, action) {
       state.people = action.payload;
     },
+    setOpen(state) {
+      state.isopen = !state.isopen;
+    },
+    setShow(state) {
+      state.show = !state.show;
+    },
+    setLoading(state) {
+      state.loading = false;
+    },
   },
 });
-export const { selectPerson, updateselectedperson, addpeoples } =
-  peopleslice.actions;
+export const {
+  selectPerson,
+  updateselectedperson,
+  addpeoples,
+  setOpen,
+  setShow,
+  setLoading,
+} = peopleslice.actions;
 export default peopleslice.reducer;

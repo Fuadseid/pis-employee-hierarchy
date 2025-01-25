@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Popup from "../components/Popup";
 import {
@@ -7,15 +8,22 @@ import {
   fetchPerson,
   fetchpersonandpeople,
 } from "../services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { addpeoples, selectPerson } from "../redux/slices/peopleSlice";
+
+import {
+  addpeoples,
+  selectPerson,
+  setLoading,
+  setOpen,
+  setShow,
+} from "../redux/slices/peopleSlice";
+import { addpostion } from "../redux/slices/postionSlice";
 
 const TreeView = () => {
-  const [positions, setPositions] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [show, setShow] = useState(false);
-  const [isopen, setIsopen] = useState(false);
-  const { selecteduser, people } = useSelector((state) => state.people);
+  const { people, show, isopen, loading } = useSelector(
+    (state) => state.people
+  );
+  const selecteduser = useSelector((state) => state.people.selectedPerson);
+  const { postion } = useSelector((state) => state.postion);
   const dispatch = useDispatch();
 
   const hadledelete = async (id) => {
@@ -29,7 +37,7 @@ const TreeView = () => {
 
   const startupdate = async (id) => {
     try {
-      setIsopen(!isopen);
+      dispatch(setOpen());
       if (!id) return;
       const data = await fetchPerson(id);
       dispatch(selectPerson(data.data));
@@ -43,7 +51,7 @@ const TreeView = () => {
       e.preventDefault();
       const data = await DeletePerson(selecteduser.id, selecteduser);
       console.log(data);
-      setIsopen(!isopen);
+      dispatch(setOpen());
     } catch (err) {
       console.log(err);
     }
@@ -53,12 +61,12 @@ const TreeView = () => {
     async function fetchDatas() {
       try {
         const [positionsData, peopleData] = await fetchpersonandpeople();
-        setPositions(positionsData.data);
+        dispatch(addpostion(positionsData.data));
         dispatch(addpeoples(peopleData.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+        dispatch(setLoading());
       }
     }
 
@@ -66,7 +74,7 @@ const TreeView = () => {
   }, []);
 
   const renderTree = (parentId) => {
-    return positions
+    return postion
       .filter((position) => position.parentId == parentId)
       .map((position) => (
         <li
@@ -122,7 +130,7 @@ const TreeView = () => {
     return <Loader />;
   }
 
-  if (!positions || !people) {
+  if (!postion || !people) {
     return <div>Error loading data</div>;
   }
 
@@ -130,7 +138,7 @@ const TreeView = () => {
     <div>
       <div className=" absolute top-24 left-20 ">
         <span
-          onClick={() => setShow(!show)}
+          onClick={() => dispatch(setShow())}
           className="bg-black text-white px-3 py-2 rounded-lg cursor-pointer "
         >
           {show ? "hide employe🦯" : "show employes 👁️"}
