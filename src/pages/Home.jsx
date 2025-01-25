@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { fetchpersonandpeople } from "../services/api";
+import { setPositions } from "../redux/slices/postionSlice";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [positionsData] = await fetchpersonandpeople();
+        dispatch(setPositions(positionsData.data));
+      } catch (err) {
+        console.error("Error fetching positions:", err);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="bg-gradient-to-br from-green-50 via-lime-100 to-green-200 min-h-screen flex flex-col items-center justify-center p-6">
       {/* Logo Section */}

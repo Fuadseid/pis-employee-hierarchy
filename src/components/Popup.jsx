@@ -5,7 +5,7 @@ import { updateselectedperson } from "../redux/slices/peopleSlice";
 const Popup = ({ hadleclose, hadleupdate }) => {
   const selecteduser = useSelector((state) => state.people.selectedPerson);
   const dispatch = useDispatch();
- 
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     dispatch(updateselectedperson({ field: name, value }));
