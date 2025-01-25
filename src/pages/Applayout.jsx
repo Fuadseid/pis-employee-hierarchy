@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const Applayout = () => {
   return (
-    <div className="bg-gray-300 h-screen">
+    <div className=" h-screen">
       <Navbar />
       <div>
         <Outlet />

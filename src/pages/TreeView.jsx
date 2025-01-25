@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Popup from "../components/Popup";
@@ -25,10 +25,12 @@ const TreeView = () => {
   const selecteduser = useSelector((state) => state.people.selectedPerson);
   const { postion } = useSelector((state) => state.postion);
   const dispatch = useDispatch();
+  const [triger, setTriger] = useState(false);
 
   const hadledelete = async (id) => {
     try {
       const res = await deletePerson(id);
+      setTriger((triger) => !triger);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -47,10 +49,11 @@ const TreeView = () => {
   };
 
   const hadleupdate = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
       const data = await DeletePerson(selecteduser.id, selecteduser);
       console.log(data);
+      setTriger((triger) => !triger);
       dispatch(setOpen());
     } catch (err) {
       console.log(err);
@@ -71,7 +74,7 @@ const TreeView = () => {
     }
 
     fetchDatas();
-  }, []);
+  }, [triger]);
 
   const renderTree = (parentId) => {
     return postion
@@ -79,7 +82,7 @@ const TreeView = () => {
       .map((position) => (
         <li
           key={position.id}
-          className="w-[50%] flex flex-col space-y-1  bg-gray-500  px-5 py-4 rounded-2xl"
+          className=" sm:w-[50%] flex flex-col space-y-1  bg-gray-500  px-5 py-4 rounded-2xl "
         >
           <div className="flex min-w-max font-mono">
             <span className="text-gray-200  text-lg font-bold shadow-lg px-6">
@@ -141,10 +144,10 @@ const TreeView = () => {
           onClick={() => dispatch(setShow())}
           className="bg-black text-white px-3 py-2 rounded-lg cursor-pointer "
         >
-          {show ? "hide employe🦯" : "show employes 👁️"}
+          {show ? "hide employe" : "show employes 👁️"}
         </span>
       </div>
-      <ul className="flex justify-center items-center min-h-max pt-20  bg-gray-300 ">
+      <ul className="flex justify-center items-center min-h-max pt-20    ">
         {renderTree(null)}{" "}
       </ul>
       {isopen && (
