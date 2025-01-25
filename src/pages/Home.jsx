@@ -111,18 +111,6 @@ const Home = () => {
           </Link>
         </motion.div>
       </div>
-
-      {/* Footer Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5 }}
-        className="mt-16 text-center"
-      >
-        <p className="text-gray-500 text-sm">
-          Need help? Visit our support page or contact us for assistance.
-        </p>
-      </motion.div>
     </div>
   );
 };
