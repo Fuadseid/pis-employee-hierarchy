@@ -1,6 +1,14 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateselectedperson } from "../redux/slices/peopleSlice";
 
-const Popup = ({ hadleclose, hadleupdate, selecteduser, setselecteduser }) => {
+const Popup = ({ hadleclose, hadleupdate }) => {
+  const selecteduser = useSelector((state) => state.people.selectedPerson);
+  const dispatch = useDispatch();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    dispatch(updateselectedperson({ field: name, value })); // Dispatch the action to update the field
+  };
   return (
     <div className="w-full h-screen absolute top-0 right-0 backdrop-blur-2xl  flex justify-center items-center  ">
       <div className="bg-gray-300  max-w-[50%] h-[60%] flex flex-col justify-evenly items-center rounded-lg p-5 sm:w-[40%] shadow-xl">
@@ -11,30 +19,25 @@ const Popup = ({ hadleclose, hadleupdate, selecteduser, setselecteduser }) => {
               type="text"
               className="w-full px-2 py-2 rounded-md border-none mt-3 "
               placeholder="please enter the name"
-              value={selecteduser.name}
-              onChange={(e) =>
-                setselecteduser({ ...selecteduser, name: e.target.value })
-              }
+              name="name"
+              value={selecteduser?.name}
+              onChange={handleInputChange}
             />
           </div>
           <div>
             <label className="text-md font-bold">description</label>
             <input
               type="text"
+              name="description"
               className="w-full px-2 py-2 rounded-md border-none mt-3"
               placeholder="please enter the description"
-              value={selecteduser.description}
-              onChange={(e) =>
-                setselecteduser({
-                  ...selecteduser,
-                  description: e.target.value,
-                })
-              }
+              value={selecteduser?.description}
+              onChange={handleInputChange}
             />
           </div>
 
           <button
-            className="w-[100%] self-center bg-black px-3 py-3 border-none text-white rounded-md mt-3"
+            className="w-[100%] self-center bg-black px-3 py-3 border-none text-white rounded-md mt-3 cursor-pointer"
             onClick={(e) => hadleupdate(e)}
           >
             update

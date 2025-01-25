@@ -4,29 +4,35 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Form() {
-
   const [positions, setPositions] = useState([]);
   const [selectedPositionId, setSelectedPositionId] = useState(null);
-  const Person_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
-  const Position_Url = "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
+  const Person_Url =
+    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people";
+  const Position_Url =
+    "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position";
 
-  const { register, reset, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = (data) => {
-    axios.post(Person_Url, {
-      name: data.name,
-      description: data.description,
-      parentId: selectedPositionId,
-    })
-    .then((response) => {
-      console.log("Person added:", response.data);
-    })
-    .catch((err) => {
-      console.error("Error adding person:", err);
-    });
+    axios
+      .post(Person_Url, {
+        name: data.name,
+        description: data.description,
+        parentId: selectedPositionId,
+      })
+      .then((response) => {
+        console.log("Person added:", response.data);
+      })
+      .catch((err) => {
+        console.error("Error adding person:", err);
+      });
     reset();
     setSelectedPositionId(null);
-
   };
 
   useEffect(() => {
@@ -44,12 +50,6 @@ function Form() {
 
   return (
     <>
-      <img
-        className="w-30 h-10 mx-auto mt-[5%] md:mt-[3%]"
-        src="/images/perago2.webp"
-        alt="LOGO"
-      />
-
       <div className="flex flex-col md:flex-row justify-center items-center mt-10 md:mt-16">
         <motion.img
           initial={{ opacity: 0, x: -50 }}
