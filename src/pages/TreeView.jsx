@@ -1,68 +1,60 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import Popup from "../components/Popup";
-import { useNavigate } from "react-router-dom";
+import {
+  DeletePerson,
+  deletePerson,
+  fetchPerson,
+  fetchpersonandpeople,
+} from "../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { addpeoples, selectPerson } from "../redux/slices/peopleSlice";
+
 const TreeView = () => {
   const [positions, setPositions] = useState(null);
-  const [people, setPeople] = useState(null);
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [isopen, setIsopen] = useState(false);
-  const [selecteduser, setselecteduser] = useState({
-    id: null,
-    name: "",
-    description: "",
-  });
+  const { selecteduser, people } = useSelector((state) => state.people);
+  const dispatch = useDispatch();
 
   const hadledelete = async (id) => {
-    await axios.delete(
-      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${id}`
-    );
+    try {
+      const res = await deletePerson(id);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  async function fetchuser(selectedid) {
-    if (selectedid == null) return;
-    else {
-      const data = await axios.get(
-        `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selectedid}`
-      );
-
-      setselecteduser({
-        ...selecteduser,
-        id: data.data.id,
-        name: data.data.name,
-        description: data.data.description,
-      });
+  const startupdate = async (id) => {
+    try {
+      setIsopen(!isopen);
+      if (!id) return;
+      const data = await fetchPerson(id);
+      dispatch(selectPerson(data.data));
+    } catch (err) {
+      console.log(err);
     }
-  }
-  const hadleclose = (id) => {
-    setIsopen(!isopen);
-    fetchuser(id);
   };
 
   const hadleupdate = async (e) => {
-    e.preventDefault();
-    const data = await axios.put(
-      `https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people/${selecteduser.id}`,
-      selecteduser
-    );
+    try {
+      e.preventDefault();
+      const data = await DeletePerson(selecteduser.id, selecteduser);
+      console.log(data);
+      setIsopen(!isopen);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   useEffect(() => {
     async function fetchDatas() {
       try {
-        const [positionsData, peopleData] = await Promise.all([
-          axios.get(
-            "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/position"
-          ),
-          axios.get(
-            "https://6789fbc8dd587da7ac284cc5.mockapi.io/api/v1/people"
-          ),
-        ]);
-
+        const [positionsData, peopleData] = await fetchpersonandpeople();
         setPositions(positionsData.data);
-
-        setPeople(peopleData.data);
+        dispatch(addpeoples(peopleData.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -71,7 +63,7 @@ const TreeView = () => {
     }
 
     fetchDatas();
-  }, [hadleupdate, hadledelete]);
+  }, []);
 
   const renderTree = (parentId) => {
     return positions
@@ -104,7 +96,7 @@ const TreeView = () => {
                       </span>
                       <button
                         onClick={() => {
-                          hadleclose(person.id);
+                          startupdate(person.id);
                         }}
                         className=" bg-green-500 px-3 py-1 rounded-md font-bold text-white border-none cursor-pointer"
                       >
@@ -150,10 +142,8 @@ const TreeView = () => {
       {isopen && (
         <Popup
           isopen={isopen}
-          hadleclose={hadleclose}
+          hadleclose={startupdate}
           hadleupdate={hadleupdate}
-          selecteduser={selecteduser}
-          setselecteduser={setselecteduser}
         />
       )}
     </div>

@@ -75,12 +75,6 @@ const AddPosition = () => {
 
   return (
     <>
-      <img
-        className="w-30 h-10 mx-auto mt-[5%] md:mt-[3%] consistent-styling"
-        src="/images/perago2.webp"
-        alt="LOGO"
-      />
-
       <div className="flex flex-col md:flex-row justify-center items-center mt-10 md:mt-16 consistent-styling">
         <motion.img
           initial={{ opacity: 0, x: -50 }}
